@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mavenwebdeploy
+  labels:
+    type: deployment
+  namespace: test-ns
+spec:
+  replicas: 3
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: mavenwebapplication
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 60
+  template:
+    metadata:
+      name: mavenapplicationpod
+      labels:
+        app: mavenwebapplication
+    spec:
+      containers:
+      - name: mavencontainer
+        image: manikanta1213/maven-web-app:10
+        ports:
+        - containerPort: 8080
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mvnsvc
+  namespace: test-ns
+spec:
+  selector:
+    app: mavenwebapplication
+  type: NodePort
+  ports:
+  - port: 80
