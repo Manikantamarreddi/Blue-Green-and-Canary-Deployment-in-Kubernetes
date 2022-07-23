@@ -1,0 +1,15 @@
+
+Consider you are Deploying a application as pods using Deployment in kubernetes. 
+Note: Deployment manages ReplicaSets and ReplicaSets Manages Pods and Pod manages Containers internally.
+
+Now due to our latest Deployment (New Change) many of the features Got Broken and this causes impact on end users. So you should immediately rollback to Previous Revision.
+This is possible because we are using Deployment Controller to deploy our Pods.
+
+To see the Revisions available for your deployment use command: kubectl rollout history deployment <deploymentName> -n <namespaceName>
+ This gives different revisions of our deployment.
+Now to see more information about a particualr revision like what Image it is using, what environment variables it is using you can execute below command
+  kubectl rollout history deployment <deploymentName> --revision <revisionNumber> -n <namespaceName>
+Now to rollback to Previous Revision if there are issues in current revision, you can use below command
+  kubectl rollout undo deployment <deploymentName> -n <namespaceName>
+  The above command rollbacks to last available Revision. Now if you want to rollback to Particular revison use below command.
+   kubectl rollout undo deployment <deploymentName> --to-revision -n <namespaceName>
